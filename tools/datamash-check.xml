@@ -1,0 +1,83 @@
+<tool id="DatamashCheck" name="Check" version="1.0.7dev">
+  <description>file tabular structure</description>
+
+  <requirements>
+    <requirement type="package" version="1.0.7dev">datamash</requirement>
+  </requirements>
+
+  <stdio>
+    <exit_code range="1:" level="fatal" description="error" />
+  </stdio>
+
+  <command>
+    datamash check &lt; $in_file &gt; $out_file
+  </command>
+  <inputs>
+    <param format="tabular" name="in_file" type="data" label="Select Input Data" help=""/>
+  </inputs>
+  <outputs>
+    <data format="tabular" name="out_file" />
+  </outputs>
+  <tests>
+      <test>
+          <param name="in_file" value="datamash_check_input.txt" />
+          <output name="out_file" file="datamash_check_output.txt" />
+      </test>
+  </tests>
+<help>
+
+.. class:: infomark
+
+**TIP:** Input data must be TAB delimited. If the desired dataset does not appear in the input list, use *Text Manipulation-&gt;Convert* to convert it to **Tabular** type.
+
+-----
+
+**Syntax**
+
+This tools checks an input file, validating its tabular structure (all lines have the same number of fields).
+
+-----
+
+**Example**
+
+Input file::
+
+    Genes   NOX1  DcP  HH
+    Sample  A1    A2   B3
+    Counts  514   542  490
+
+The program will report the number of lines and fields:
+
+    3 lines, 4 fields
+
+**Example**
+
+With a badly-structured input file::
+
+    Genes   NOX1  DcP  HH
+    Sample  A1    A2
+    Counts  514   542  490
+
+The program will **fail** and report the following error message::
+
+    line 1 (4 fields):
+      Genes	NOX1	DcP	HH
+    line 2 (3 fields):
+      Sample	A1	A2
+    datamash: check failed: line 2 has 3 fields (previous line had 4)
+
+This can be used as a quick intermediate step in a long pipeline,
+to validate the data between long-running steps.
+
+-----
+
+**GNU Datamash** is a Free and Open Source Software, see more details on the Datamash_ Website.
+
+**GNU Datamash** is also available as a command-line program, see http://www.gnu.org/software/datamash/download/ .
+
+For more details about supported statistical operations, see Datamash_ website.
+
+.. _Datamash: http://www.gnu.org/software/datamash/
+
+</help>
+</tool>
