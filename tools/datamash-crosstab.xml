@@ -1,0 +1,155 @@
+<tool id="DatamashCrosstab" name="Cross-Tabulate" version="1.0.7dev">
+  <description>(aka pivot-tables)</description>
+
+  <requirements>
+    <requirement type="package" version="1.0.7dev">datamash</requirement>
+  </requirements>
+
+  <stdio>
+    <exit_code range="1:" level="fatal" description="error" />
+  </stdio>
+
+  <command>
+    datamash
+      $header_in
+      $need_sort
+      $ignore_case
+      crosstab
+      ${op_column_x},${op_column_y}
+      ${op_name}
+      ${op_column_data}
+      &lt; $in_file &gt; $out_file
+  </command>
+
+  <inputs>
+    <param format="tabular" name="in_file" type="data" label="Select Input Data" help=""/>
+
+    <param name="header_in" type="boolean" truevalue="--header-in" falsevalue=""
+	label="Input file has a header line" help="Mark this if the input file's first line is a header line" />
+
+    <param name="need_sort" type="boolean" truevalue="--sort" falsevalue="" default="True"
+	label="Sort input" help="Mark if the input file is not sorted. If the input file is already sorted, unmark this option to reduce computing time." />
+
+    <param name="ignore_case" type="boolean" truevalue="--ignore-case" falsevalue=""
+	label="Ignore case when grouping" help="If set, upper/lowercase differences will be ignored when grouping fields." />
+
+    <param name="op_column_x" label="Column:" type="data_column" data_ref="in_file"
+	help="Tabulate values in this field as columns" />
+
+    <param name="op_column_y" label="Rows:" type="data_column" data_ref="in_file"
+	help="Tabulate values in this field as rows" />
+
+    <param name="op_name" type="select" label="Type"
+	help="Operation to perform">
+	<option value="count">count</option>
+	<option value="sum">sum</option>
+	<option value="min">minimum</option>
+	<option value="max">maximum</option>
+	<option value="absmin">Absolute minimum</option>
+	<option value="absmax">Absolute maximum</option>
+	<option value="mean">Mean</option>
+	<option value="pstdev">Population Standard deviantion</option>
+	<option value="sstdev">Sample Standard deviantion</option>
+	<option value="median">Median</option>
+	<option value="q1">1st quartile</option>
+	<option value="q3">3rd quartile</option>
+	<option value="iqr">Inter-quartile range</option>
+	<option value="mad">Median Absolute Deviation</option>
+	<option value="pvar">Variance (population)</option>
+	<option value="svar">Variance (sample)</option>
+	<option value="sskew">Skewness (sample)</option>
+	<option value="pskew">Skewness (population)</option>
+	<option value="skurt">Kurtosis (sample)</option>
+	<option value="pkurt">Kurtosis (population)</option>
+	<option value="jarque">Jarque-Bera Normality test</option>
+	<option value="dpo">DAgostino-Pearson Omnibus Normality Test</option>
+	<option value="mode">Mode</option>
+	<option value="antimode">Anti-Mode</option>
+	<option value="unique">Combine all unique values</option>
+	<option value="collapse">Combine all values</option>
+	<option value="countunique">Count Unique values</option>
+   </param>
+
+   <param name="op_column_data" label="operate on column" type="data_column" data_ref="in_file"
+	help="(does not apply for 'count' operation)" />
+
+  </inputs>
+
+  <outputs>
+    <data format="tabular" name="out_file" />
+  </outputs>
+
+  <tests>
+      <test>
+          <param name="in_file" value="datamash_crosstab_input.txt" />
+          <param name="header_in" value="false" />
+          <param name="need_sort"  value="true" />
+          <param name="op_column_x" value="1" />
+          <param name="op_column_y" value="2" />
+          <param name="op_name" value="count" />
+          <param name="op_column_data" value="1" />
+          <param name="ignore_case"  value="false" />
+          <output name="out_file" file="datamash_crosstab_output_count.txt" />
+      </test>
+
+      <test>
+          <param name="in_file" value="datamash_crosstab_input.txt" />
+          <param name="header_in" value="false" />
+          <param name="need_sort"  value="true" />
+          <param name="op_column_x" value="1" />
+          <param name="op_column_y" value="2" />
+          <param name="op_name" value="sum" />
+          <param name="op_column_data" value="3" />
+          <param name="ignore_case"  value="false" />
+          <output name="out_file" file="datamash_crosstab_output_sum.txt" />
+      </test>
+  </tests>
+
+<help>
+
+.. class:: infomark
+
+**TIP:** Input data must be TAB delimited. If the desired dataset does not appear in the input list, use *Text Manipulation-&gt;Convert* to convert it to **Tabular** type.
+
+-----
+
+**Syntax**
+
+This tools performs cross-tabulation (also known as pivot tables) on two fields in an input file.
+For each incident, an operation will be perfome.d
+
+-----
+
+**Example 1**
+
+- For a file containing these values::
+
+    a    x    3
+    a    y    7
+    b    x    21
+    a    x    40
+
+- Cross-Tabulating by fields 1 (a,b) and field 2 (x,y), and *count*ing how many incidents exist in the file::
+
+         x    y
+    a    2    1
+    b    1    N/A
+
+- Cross-Tabulating by fields 1 (a,b) and field 2 (x,y), and *sum*ming all incidents::
+
+         x    y
+    a    43   7
+    b    21   N/A
+
+-----
+
+**GNU Datamash** is a Free and Open Source Software, see more details on the Datamash_ Website.
+
+**GNU Datamash** is also available as a command-line program, see http://www.gnu.org/software/datamash/download/ .
+
+For more details about supported statistical operations, see Datamash_ website.
+
+.. _Datamash: http://www.gnu.org/software/datamash/
+
+</help>
+</tool>
