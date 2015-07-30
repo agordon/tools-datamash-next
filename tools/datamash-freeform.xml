@@ -1,0 +1,170 @@
+<tool id="DatamashFreeForm" name="datamash" version="1.0.7dev">
+  <description>(free-form syntax)</description>
+
+  <requirements>
+    <requirement type="package" version="1.0.7dev">datamash</requirement>
+  </requirements>
+
+  <stdio>
+    <exit_code range="1:" level="fatal" description="error" />
+  </stdio>
+
+  <command>
+    datamash
+      $header_in
+      $header_out
+      $need_sort
+      $print_full_line
+      $ignore_case
+      $instructions
+      &lt; $in_file &gt; $out_file
+  </command>
+  <inputs>
+    <param format="tabular" name="in_file" type="data" label="Select Input Data" help=""/>
+
+    <param name="instructions" label="Instructions" type="text" help="See examples below">
+        <validator type="regex" message="invalid fields value">^[-a-zA-Z:0-9, ]*$</validator>
+    </param>
+
+    <param name="header_in" type="boolean" truevalue="--header-in" falsevalue=""
+	label="Input file has a header line" help="Mark this if the input file's first line is a header line" />
+
+    <param name="header_out" type="boolean" truevalue="--header-out" falsevalue=""
+	label="Print header line" help="Mark this if you want the first line to show the field names" />
+
+    <param name="need_sort" type="boolean" truevalue="--sort" falsevalue=""
+	label="Sort input" help="Mark if the input file is not sorted. If the input file is already sorted, unmark this option to reduce computing time." />
+
+    <param name="print_full_line" type="boolean" truevalue="--full" falsevalue=""
+	label="Print all fields from input file" help="If set, all input fields will be printed. If unset, only fields used for grouping will be printed." />
+
+    <param name="ignore_case" type="boolean" truevalue="--ignore-case" falsevalue=""
+	label="Ignore case when grouping" help="If set, upper/lowercase differences will be ignored when grouping fields." />
+
+    <param name="narm" type="boolean" truevalue="--narm" falsevalue=""
+	label="Ignore NA values in the input file" help="If set, 'NA' and 'N/A' values are silently ignored (for R compatibility)" />
+  </inputs>
+
+  <outputs>
+    <data format="tabular" name="out_file" />
+  </outputs>
+
+  <tests>
+
+      <!-- Typical usage, emulating the 'datamash-groupby' tool -->
+      <test>
+          <param name="in_file" value="group_compute_input.txt" />
+          <param name="instructions" value="groupby 2 sum 3" />
+          <param name="header_in" value="true" />
+          <param name="header_out" value="true" />
+          <param name="need_sort"  value="true" />
+          <param name="print_full_line"  value="false" />
+          <param name="ignore_case"  value="false" />
+          <param name="narm"  value="false" />
+          <output name="out_file" file="group_compute_output.txt" />
+      </test>
+
+      <!-- Typical usage, emulating the 'datamash-transpose' tool -->
+      <test>
+          <param name="in_file" value="datamash_transpose_input.txt" />
+          <param name="instructions" value="transpose" />
+          <param name="header_in" value="false" />
+          <param name="header_out" value="false" />
+          <param name="need_sort"  value="false" />
+          <param name="print_full_line"  value="false" />
+          <param name="ignore_case"  value="false" />
+          <param name="narm"  value="false" />
+          <output name="out_file" file="datamash_transpose_output.txt" />
+      </test>
+
+      <!-- Typical usage, emulating the 'datamash-check' tool -->
+      <test>
+          <param name="in_file" value="datamash_check_input.txt" />
+          <param name="instructions" value="check" />
+          <param name="header_in" value="false" />
+          <param name="header_out" value="false" />
+          <param name="need_sort"  value="false" />
+          <param name="print_full_line"  value="false" />
+          <param name="ignore_case"  value="false" />
+          <param name="narm"  value="false" />
+          <output name="out_file" file="datamash_check_output.txt" />
+      </test>
+
+      <!-- Typical usage, emulating the 'datamash-reverse' tool -->
+      <test>
+          <param name="in_file" value="datamash_reverse_input.txt" />
+          <param name="instructions" value="reverse" />
+          <param name="header_in" value="false" />
+          <param name="header_out" value="false" />
+          <param name="need_sort"  value="false" />
+          <param name="print_full_line"  value="false" />
+          <param name="ignore_case"  value="false" />
+          <param name="narm"  value="false" />
+          <output name="out_file" file="datamash_reverse_output.txt" />
+      </test>
+
+      <!-- Typical usage, emulating the 'datamash-crosstab' tool -->
+<!-- These two tests cause galaxy framework failure:
+        No JSON object could be decoded: line 1 column 0 (char 0) 
+      <test>
+          <param name="in_file" value="datamash_crosstab_input.txt" />
+          <param name="instructions" value="crosstab 1,2" />
+          <param name="header_in" value="false" />
+          <param name="header_out" value="false" />
+          <param name="need_sort"  value="false" />
+          <param name="print_full_line"  value="false" />
+          <param name="ignore_case"  value="false" />
+          <param name="narm"  value="false" />
+          <output name="out_file" file="datamash_crosstab_output_sum.txt" />
+      </test>
+
+      <test>
+          <param name="in_file" value="datamash_crosstab_input.txt" />
+          <param name="instructions" value="crosstab 1,2 sum 3" />
+          <param name="header_in" value="false" />
+          <param name="header_out" value="false" />
+          <param name="need_sort"  value="true" />
+          <param name="print_full_line"  value="false" />
+          <param name="ignore_case"  value="false" />
+          <param name="narm"  value="false" />
+          <output name="out_file" file="datamash_crosstab_output_sum.txt" />
+      </test>
+-->
+
+  </tests>
+<help>
+
+.. class:: infomark
+
+**NOTE:**: This tool is for advanced users.
+
+**TIP:** Input data must be TAB delimited. If the desired dataset does not appear in the input list, use *Text Manipulation-&gt;Convert* to convert it to **Tabular** type.
+
+-----
+
+**Syntax**
+
+This tools performs common operations (such as summing, counting, mean, standard-deviation) on input file, based on tabular data. The *instructions* box allows advance usage using **datamash** syntax (similar to command-line usage).
+
+For full details, see the Datamash_ website.
+
+-----
+
+**Usage Examples**
+
+* Group by column 1, sum column 2,3,4 : **groupby 1 sum 2-4**
+* Group by columns 1 and 2, print the minimum,maxmium,mean of column 6: **groupby 1,2 min 6 max 6 mean 6**
+* Group by column named *patientid*, sum the values in column named *genes* (must enable *input headers*): **groupby patientid sum genes**
+
+-----
+
+**GNU Datamash** is a Free and Open Source Software, see more details on the Datamash_ Website.
+
+**GNU Datamash** is also available as a command-line program, see http://www.gnu.org/software/datamash/download/ .
+
+For more details about supported statistical operations, see Datamash_ website.
+
+.. _Datamash: http://www.gnu.org/software/datamash/
+
+</help>
+</tool>
