@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="datamash" version="1.0.7">
+    <package name="datamash" version="1.0.7dev">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">http://ftpmirror.gnu.org/datamash/datamash-1.0.7.tar.gz</action>
+                <action type="download_by_url">http://files.housegordon.org/datamash/src/datamash-1.0.7.39-6417.tar.gz</action>
                 <action type="shell_command">./configure --prefix=$INSTALL_DIR --disable-dependency-tracking</action>
                 <action type="shell_command">make</action>
                 <action type="shell_command">make check</action>

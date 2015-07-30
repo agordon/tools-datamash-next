@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="datamash" version="1.0.7">
+    <package name="datamash" version="1.0.7dev">
         <repository name="package_datamash_1_0_7"/>
     </package>
 </tool_dependency>

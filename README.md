@@ -3,6 +3,10 @@ GNU Datamash Galaxy Tools
 
 This repository contains Galaxy tools for GNU Datamash.
 
+**WARNING**: This repository uses the development branch
+of GNU Datamash, with new features which are not yet
+in the stable version.
+
 License
 -------
 Copyright (C) 2015 Assaf Gordon (assafgordon@gmail.com).
@@ -27,7 +31,7 @@ First clone a galaxy repository:
 
 Then clone this repository:
 
-    git clone https://github.com/agordon/tools-datamash
+    git clone https://github.com/agordon/tools-datamash-next
 
 Install [Planemo](https://github.com/galaxyproject/planemo/)
 (see [Planemo Quick-Start](https://planemo.readthedocs.org/en/latest/readme.html))
